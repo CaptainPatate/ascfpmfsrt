@@ -1,0 +1,20 @@
+<html>
+  <body>
+    {{ nombre }} Found
+    <table>
+      <tr>
+	<th>Conférence</th>
+	<th>Lieu</th>
+	<th>Deadline</th>
+      </tr>
+      {% for cfp in cfps %}
+      <tr>
+	<td><a href="{{ cfp.link }}">{{ cfp.name }}</a></td>
+	<td>{{ cfp.city }}, {{ cfp.country }}</td>
+	<td>{{ cfp.submission_deadline }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    <a href="/addcfp">Add a new call for paper</a>
+  </body>
+</html>
