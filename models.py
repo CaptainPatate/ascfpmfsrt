@@ -12,7 +12,7 @@ class Cfp(db.Model):
     country = db.StringProperty()
     city = db.StringProperty()
     rate = db.RatingProperty()
-    subitters = db.ListProperty(User)
+    submitters = db.ListProperty(User)
     category = db.StringListProperty()
     keywords = db.StringListProperty()
 

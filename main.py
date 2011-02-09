@@ -9,7 +9,7 @@ from google.appengine.ext.webapp.util import run_wsgi_app
 from models import Cfp
 
 # name, fullname, website, begin_conf_date, end_conf_date, submission_deadline,
-# notification_date, country, city, acceptance_rate, subitters, category, keywords
+# notification_date, country, city, acceptance_rate, submitters, category, keywords
 
 class CfpView(webapp.RequestHandler):
     def get(self):
