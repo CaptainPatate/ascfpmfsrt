@@ -13,7 +13,7 @@ class Cfp(db.Model):
     city = db.StringProperty()
     rate = db.RatingProperty()
     submitters = db.ListProperty(User)
-    category = db.StringListProperty()
+    category = db.StringProperty()
     keywords = db.StringListProperty()
 
     def setWebsite(self, link):

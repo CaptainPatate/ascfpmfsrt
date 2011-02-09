@@ -1,15 +1,72 @@
-<html>
+<xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" 
+           "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <meta name="robots" content="noarchive"/>
+    <link rel="stylesheet" href="/static/style.css" type="text/css" media="screen"/>
+    <title>A Simple CFP manager For Small Researcher Team</title>
+  </head>
+
   <body>
+
+    <ul id="navigation">
+      {% if logout_url %}
+      <li><a href="{{ logout_url }}">Logout</a></li>
+      {% endif %}
+      <li><a href="/">List CFP</a></li>
+    </ul>
+    <h1>Add a new CFP</h1>
+
     <form action="/addcfp" method="post">
-      Nom: <input type="text" name="name"/><br/>
-      Nom complet: <input type="text" name="fullname"/><br/>
-      Lien: <input type="text" name="link"/><br/>
-      Date conférence: <input type="text" name="conf_date"/><br/>
-      Deadline: <input type="text" name="submission_deadline"/><br/>
-      Notification: <input type="text" name="notification_date"/><br/>
-      Pays: <input type="text" name="country"/><br/>
-      Ville: <input type="text" name="city"/><br/>
-      <input type="submit" value="Enregistrer"/>
+      <fieldset>
+	<legend>Conference informations</legend>
+	<p><label>Short name: <input type="text" id="name"
+	name="name"/></label></p>
+	<p><label>Fullname: <input type="text" id="fullname"
+	name="fullname" size="100"/></label></p>
+	<p><label>Website url: <input type="text" id="website"
+				      name="website" size="100"
+				      value="http://somewhereontheinternet.42"/></label></p>
+	<p><label>Category: <select name="category">
+	      <option>Conference</option>
+	      <option>Workshop</option>
+	</p>
+	<fieldset>
+	  <legend>Important dates</legend>
+	  <p><label>The conference will begin on: <input type="text" id="begin_conf_date"
+							 name="begin_conf_date"
+							 value="jj/mm/yyyy"/></label></p>
+	  <p><label>The conference will end on: <input type="text" id="end_conf_date"
+						       name="end_conf_date"
+						       value="jj/mm/yyyy"/></label></p>
+	  <p><label>Deadline for submission: <input type="text" id="submission_deadline"
+						    name="submission_deadline"
+						    value="jj/mm/yyyy"/></label></p>
+	  <p><label>Notification: <input type="text" id="notification_date"
+					 name="notification_date"
+					 value="jj/mm/yyyy"/></label></p>
+	</fieldset>
+	<fieldset>
+	  <legend>Conference location</legend>
+	  <p><label>Country: <input type="text" id="counrty"
+				    name="country"/></label></p>
+	  <p><label>City: <input type="text" id="city"
+				 name="city"/></label></p>
+	</fieldset>
+	<fieldset>
+	  <legend>Other informations</legend>
+	  <p><label>Keywords: <select name="keywords" size="3">
+		<option>security</option>
+		<option>OS</option>
+		<option>Smartcard</option>
+	      </select>
+	  </p>
+	  <p><label>Acceptance rate: <input type="text" id="acceptance_rate"
+				    name="acceptance_rate"/></label></p>
+	</fieldset>
+      </fieldset>
+      <input type="submit" value="Save this CFP"/>
     </form>
   </body>
 </html>

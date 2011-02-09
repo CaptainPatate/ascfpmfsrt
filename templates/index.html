@@ -1,21 +1,49 @@
-<html>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" 
+           "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <meta name="robots" content="noarchive"/>
+    <link rel="stylesheet" href="/static/style.css" type="text/css" media="screen"/>
+    <title>A Simple CFP manager For Small Researcher Team</title>
+  </head>
+
   <body>
-    <a href="{{ logout_url }}">Logout</a>
-    {{ nombre }} Found
-    <table>
-      <tr>
-	<th>Conférence</th>
-	<th>Lieu</th>
-	<th>Deadline</th>
-      </tr>
-      {% for cfp in cfps %}
-      <tr>
-	<td><a href="{{ cfp.link }}">{{ cfp.name }}</a></td>
-	<td>{{ cfp.city }}, {{ cfp.country }}</td>
-	<td>{{ cfp.submission_deadline }}</td>
-      </tr>
-      {% endfor %}
-    </table>
-    <a href="/addcfp">Add a new call for paper</a>
+
+    <ul id="navigation">
+      {% if logout_url %}
+      <li><a href="{{ logout_url }}">Logout</a></li>
+      {% endif %}
+      <li><a href="/addcfp">Add a CFP</a></li>
+    </ul>
+    <h1>{{ nombre }} call for paper</h1>
+    {% for cfp in cfps %}
+    <p>
+      <ul class="cfp">
+	<li><a href="{{ cfp.website }}">{{ cfp.name }}</a> &mdash;
+	{{ cfp.fullname }} ({{ cfp.category }})</li>
+	<li>From {{ cfp.begin_conf_date }} to {{ cfp.end_conf_date }}</li>
+	<li>Important date :
+	 <ul>
+	   <li>Deadline : {{ cfp.submission_deadline }}</li>
+	   <li>Acceptance notification : {{ cfp.notification_date }}</li>
+	 </ul>
+	</li>
+	<li>{{ cfp.name }} will takes place in {{ cfp.city }},
+	{{ cfp.country }}</li>
+	<li>Keywords : {% for keyword in cfp.keywords %}
+	  {{ keyword }}
+	{% endfor %}</li>
+	<li>Acceptance rate : {{ cfp.rate }}</li>
+	<li>The people will submit a paper :
+	  <ul>
+	    {% for people in cfp.submitters %}
+	    <li>{{ people.nickname }}</li>
+	    {% endfor %}
+	  </ul>
+	</li>
+      </ul>
+    </p>
+    {% endfor %}
   </body>
 </html>
