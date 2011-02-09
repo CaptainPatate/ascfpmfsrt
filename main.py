@@ -1,26 +1,24 @@
 import datetime
 import os
 
-from google.appengine.ext import webapp, db
+from google.appengine.api import users
+from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
 from google.appengine.ext.webapp.util import run_wsgi_app
 
-class Cfp(db.Model):
-    name = db.StringProperty()
-    fullname = db.StringProperty()
-    link = db.Link("hhtp://www.google.com")
-    conf_date = db.DateProperty()
-    submission_deadline = db.DateProperty()
-    notification_date = db.DateProperty()
-    country = db.StringProperty()
-    city = db.StringProperty()
+from models import Cfp
 
-class MainPage(webapp.RequestHandler):
+# name, fullname, website, begin_conf_date, end_conf_date, submission_deadline,
+# notification_date, country, city, acceptance_rate, subitters, category, keywords
+
+class CfpView(webapp.RequestHandler):
     def get(self):
         cfps = Cfp.all().fetch(limit=5)
 
         html = os.path.join(os.path.dirname(__file__), 'index.html')
-        self.response.out.write(template.render(html, {'nombre':len(cfps),'cfps':cfps}))
+        self.response.out.write(template.render(html, {'logout_url': users.create_logout_url("/"), 
+                                                       'nombre':len(cfps),'cfps':cfps}))
+
 
 class AddCfpHandler(webapp.RequestHandler):
     def to_datetime(self, date):
@@ -34,19 +32,43 @@ class AddCfpHandler(webapp.RequestHandler):
         self.response.out.write(template.render(html, {}))
 
     def post(self):
-        cfp = Cfp(name=self.request.get('name'),
-                  full_name=self.request.get('fullname'),
-                  link=self.request.get('link'),
-                  conf_date=self.to_datetime(self.request.get('conf_date')),
-                  submission_deadline=self.to_datetime(self.request.get('submission_deadline')),
-                  notification_date=self.to_datetime(self.request.get('notification_date')),
-                  country=self.request.get('country'),
-                  city=self.request.get('city'))
-        cfp.put()
-        self.redirect('/')
+        user = users.get_current_user()
+        if user:
+            cfp = Cfp()
+            cfp.name=self.request.get('name')
+            cfp.fullname=self.request.get('fullname')
+            cfp.setWebsite(self.request.get('link'))
+            cfp.begin_conf_date=self.to_datetime(self.request.get('conf_date'))
+            cfp.submission_deadline=self.to_datetime(self.request.get('submission_deadline'))
+            cfp.notification_date=self.to_datetime(self.request.get('notification_date'))
+            cfp.country=self.request.get('country')
+            cfp.city=self.request.get('city')
+            
+            cfp.put()
+            self.redirect('/')
+        else:
+            self.redirect(users.create_login_url(self.request.uri))
 
-application = webapp.WSGIApplication([('/', MainPage),
-                                      ('/addcfp', AddCfpHandler)],
+
+class FeedHandler(webapp.RequestHandler):
+    """Handles the list of quotes ordered in reverse chronological order."""
+
+    def get(self, what):
+        """Retrieve a feed"""
+        if what == 'all':    
+            cfps = Cfp.gql('ORDER BY deadline_date').fetch(10)
+        else:
+            self.response.set_status(404, 'Not Found')
+            return      
+
+        template_file = os.path.join(os.path.dirname(__file__), 'templates/atom_feed.xml')    
+        self.response.headers['Content-Type'] = 'application/atom+xml; charset=utf-8'
+        self.response.out.write(template.render(template_file, template_values))
+
+
+application = webapp.WSGIApplication([('/', CfpView),
+                                      ('/addcfp', AddCfpHandler),
+                                      ('/feed/(all)', FeedHandler)],
                                      debug=True)
 
 def main():
