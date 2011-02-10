@@ -2,7 +2,7 @@ import datetime
 import os
 
 from google.appengine.api import users
-from google.appengine.ext import webapp
+from google.appengine.ext import webapp, db
 from google.appengine.ext.webapp import template
 from google.appengine.ext.webapp.util import run_wsgi_app
 
@@ -54,6 +54,22 @@ class AddCfpHandler(webapp.RequestHandler):
             self.redirect(users.create_login_url(self.request.uri))
 
 
+class UpdateHandler(webapp.RequestHandler):
+    def get(self):
+        conf = self.request.get('conf')
+        if conf:
+            user = users.get_current_user()
+            if user:
+                cfp = db.get(conf)
+                if user not in cfp.submitters:
+                    cfp.submitters.append(user)
+                    cfp.put()
+
+                self.redirect('/')
+        else:
+            self.redirect(users.create_login_url(self.request.uri))
+
+
 class FeedHandler(webapp.RequestHandler):
     """Handles the list of quotes ordered in reverse chronological order."""
 
@@ -72,6 +88,7 @@ class FeedHandler(webapp.RequestHandler):
 
 application = webapp.WSGIApplication([('/', CfpView),
                                       ('/addcfp', AddCfpHandler),
+                                      ('/update', UpdateHandler),
                                       ('/feed/(all)', FeedHandler)],
                                      debug=True)
 
