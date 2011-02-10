@@ -23,19 +23,19 @@
 	<li><a href="{{ cfp.website }}">{{ cfp.name }}</a> &mdash;
 	{{ cfp.fullname }} ({{ cfp.category }})</li>
 	<li>From {{ cfp.begin_conf_date }} to {{ cfp.end_conf_date }}</li>
-	<li>Important date :
+	<li>Important dates:
 	 <ul>
-	   <li>Deadline : {{ cfp.submission_deadline }}</li>
-	   <li>Acceptance notification : {{ cfp.notification_date }}</li>
+	   <li>Deadline: {{ cfp.submission_deadline }}</li>
+	   <li>Acceptance notification: {{ cfp.notification_date }}</li>
 	 </ul>
 	</li>
 	<li>{{ cfp.name }} will takes place in {{ cfp.city }},
 	{{ cfp.country }}</li>
-	<li>Keywords : {% for keyword in cfp.keywords %}
+	<li>Keywords: {% for keyword in cfp.keywords %}
 	  {{ keyword }}
 	{% endfor %}</li>
-	<li>Acceptance rate : {{ cfp.rate }}</li>
-	<li>The people will submit a paper :
+	<li>Acceptance rate: {{ cfp.rate }}</li>
+	<li>The people will submit a paper:
 	  <ul>
 	    {% for people in cfp.submitters %}
 	    <li>{{ people.nickname }}</li>
