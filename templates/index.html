@@ -15,6 +15,8 @@
       <li><a href="{{ logout_url }}">Logout</a></li>
       {% endif %}
       <li><a href="/addcfp">Add a CFP</a></li>
+      <li><a href="/?order=deadline">Order by deadline</a></li>
+      <li><a href="/?order=beginning">Order by beginning</a></li>
     </ul>
     <h1>{{ nombre }} call for paper</h1>
     {% for cfp in cfps %}
@@ -38,7 +40,8 @@
 	<li>The people will submit a paper:
 	  <ul>
 	    {% for people in cfp.submitters %}
-	    <li>{{ people.nickname }}</li>
+	      <li><a href="/?people={{ people.email }}">
+		  {{ people.nickname }}</a> </li>
 	    {% endfor %}
 	    <li><a href="/update?conf={{ cfp.key }}">I will submit a paper to
 		this conference !</a></li>

@@ -13,7 +13,19 @@ from models import Cfp
 
 class CfpView(webapp.RequestHandler):
     def get(self):
-        cfps = Cfp.all().fetch(limit=50)
+
+        cfps = Cfp.all()
+        order = self.request.get('order')
+        people = self.request.get('people')
+        if order:
+            if order == 'deadline':
+                cfps = Cfp.gql('ORDER BY submission_deadline ASC')
+            elif order == 'beginning':
+                cfps = Cfp.gql('ORDER BY begin_conf_date ASC')
+        elif people:
+            cfps = Cfp.gql('WHERE submitters in :1', [users.User(people)])
+
+        cfps = cfps.fetch(limit=50)
 
         html = os.path.join(os.path.dirname(__file__), 'templates/index.html')
         self.response.out.write(template.render(html, {'logout_url': users.create_logout_url("/"),
