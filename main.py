@@ -13,7 +13,7 @@ from models import Cfp
 
 class CfpView(webapp.RequestHandler):
     def get(self):
-        cfps = Cfp.all().fetch(limit=5)
+        cfps = Cfp.all().fetch(limit=50)
 
         html = os.path.join(os.path.dirname(__file__), 'templates/index.html')
         self.response.out.write(template.render(html, {'logout_url': users.create_logout_url("/"),
