@@ -88,14 +88,15 @@ class FeedHandler(webapp.RequestHandler):
     def get(self, what):
         """Retrieve a feed"""
         if what == 'all':    
-            cfps = Cfp.gql('ORDER BY deadline_date').fetch(10)
+            cfps = Cfp.gql('ORDER BY begin_conf_date ASC').fetch(limit=50)
         else:
             self.response.set_status(404, 'Not Found')
             return      
 
-        template_file = os.path.join(os.path.dirname(__file__), 'templates/atom_feed.xml')    
+        template_file = os.path.join(os.path.dirname(__file__), 'templates/cfp_atom.xml')
         self.response.headers['Content-Type'] = 'application/atom+xml; charset=utf-8'
-        self.response.out.write(template.render(template_file, template_values))
+        self.response.out.write(template.render(template_file, {'APPLICATION_ID':os.environ['APPLICATION_ID'],
+                                                                'cfps':cfps}))
 
 
 application = webapp.WSGIApplication([('/', CfpView),
