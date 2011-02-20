@@ -85,10 +85,21 @@ class UpdateHandler(webapp.RequestHandler):
 class FeedHandler(webapp.RequestHandler):
     """Handles the list of quotes ordered in reverse chronological order."""
 
-    def get(self, what):
-        """Retrieve a feed"""
-        if what == 'all':    
+    def get(self, what, userid=None):
+        if what == 'all':
             cfps = Cfp.gql('ORDER BY begin_conf_date ASC').fetch(limit=50)
+        elif what == 'submitters':
+            user = users.get_current_user()
+            if user:
+                cfps = Cfp.gql('WHERE submitters != NULL ORDER BY submitters,begin_conf_date ASC').fetch(limit=50)
+            else:
+                self.redirect(users.create_login_url(self.request.uri))
+        elif what == 'submitter':
+            user = users.get_current_user()
+            if user:
+                cfps = Cfp.gql('WHERE submitters in :1 ORDER BY submitters,begin_conf_date ASC', [users.User(userid.replace('%40','@'))]).fetch(limit=50)
+            else:
+                self.redirect(users.create_login_url(self.request.uri))
         else:
             self.response.set_status(404, 'Not Found')
             return      
@@ -99,10 +110,12 @@ class FeedHandler(webapp.RequestHandler):
                                                                 'cfps':cfps}))
 
 
-application = webapp.WSGIApplication([('/', CfpView),
-                                      ('/addcfp', AddCfpHandler),
-                                      ('/update', UpdateHandler),
-                                      ('/feed/(all)', FeedHandler)],
+application = webapp.WSGIApplication([(r'/', CfpView),
+                                      (r'/addcfp', AddCfpHandler),
+                                      (r'/update', UpdateHandler),
+                                      (r'/feed/(all)', FeedHandler),
+                                      (r'/feed/(submitters)', FeedHandler),
+                                      (r'/feed/(submitter)/(.*)', FeedHandler)],
                                      debug=True)
 
 def main():
