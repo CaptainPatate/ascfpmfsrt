@@ -15,7 +15,7 @@
       <li><a href="{{ logout_url|escape }}">Logout</a></li>
       {% endif %}
       <li><a href="/">All CFPs</a></li>
-      <li><a href="/addcfp">Add a CFP</a></li>
+      <li><a href="/addcfp/">Add a CFP</a></li>
     </ul>
     <h1>{{ nombre }} call for paper</h1>
     {% for cfp in cfps %}
@@ -42,10 +42,11 @@
 	      <li><a href="/?people={{ people.email }}">
 		  {{ people.nickname }}</a> </li>
 	    {% endfor %}
-	    <li><a href="/update?conf={{ cfp.key }}">I will submit a paper to
+	    <li><a href="/submit/{{ cfp.key }}">I will submit a paper to
 		this conference !</a></li>
 	  </ul>
 	</li>
+	<li><a href="/update/{{ cfp.key }}">I want to modify this CFP</a></li>
       </ul>
     </p>
     {% endfor %}

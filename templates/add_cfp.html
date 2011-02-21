@@ -18,52 +18,65 @@
     </ul>
     <h1>Add a new CFP</h1>
 
-    <form action="/addcfp" method="post">
+    <form action="/addcfp/{{ cfp.key }}" method="post">
       <fieldset>
 	<legend>Conference informations</legend>
 	<p><label>Short name: <input type="text" id="name"
-	name="name"/></label></p>
+	name="name" value="{{ cfp.name }}"/></label></p>
 	<p><label>Fullname: <input type="text" id="fullname"
-	name="fullname" size="55"/></label></p>
+	name="fullname" size="55" value="{{ cfp.fullname }}"/></label></p>
 	<p><label>Website url: <input type="text" id="website"
 				      name="website" size="55"
-				      value="http://somewhereontheinternet.42"/></label></p>
+				      value={% if cfp %} "{{ cfp.website }}"
+				      {% else %}
+				      "http://somewhereontheinternet.42"
+				      {% endif %}/></label></p>
 	<p><label>Category: <select name="category">
-	      <option>Conference</option>
-	      <option>Workshop</option>
+	      <option value="conference" {% ifequal cfp.category 'conference' %}
+		      selected="selected" {% endifequal %}>Conference</option>
+	      <option value="workshop" {% ifequal  cfp.category 'workshop' %}
+		      selected="selected" {% endifequal %}>Workshop</option>
 	</p>
 	<fieldset>
 	  <legend>Important dates</legend>
 	  <p><label>The conference will begin on: <input type="text" id="begin_conf_date"
 							 name="begin_conf_date"
-							 value="jj/mm/yyyy"/></label></p>
+							 value={% if cfp.begin_conf_date %} "{{ cfp.begin_conf_date }}"
+								{% else %}
+								"yyyy-mm-jj"{% endif %}/></label></p>
 	  <p><label>The conference will end on: <input type="text" id="end_conf_date"
 						       name="end_conf_date"
-						       value="jj/mm/yyyy"/></label></p>
+						       value={% if cfp.cfp.end_conf_date %} "{{ cfp.end_conf_date }}"
+							      {% else %}
+							      "yyyy-mm-jj"{% endif %}/></label></p>
 	  <p><label>Deadline for submission: <input type="text" id="submission_deadline"
 						    name="submission_deadline"
-						    value="jj/mm/yyyy"/></label></p>
+						    value={% if cfp.submission_deadline %} "{{ cfp.submission_deadline }}"
+							   {% else %}
+							   "yyyy-mm-jj"{% endif %}/></label></p>
 	  <p><label>Notification: <input type="text" id="notification_date"
 					 name="notification_date"
-					 value="jj/mm/yyyy"/></label></p>
+					 value={% if cfp.notification_date %} "{{ cfp.notification_date }}"
+						{% else %}
+						"yyyy-mm-jj"{% endif %}/></label></p>
 	</fieldset>
 	<fieldset>
 	  <legend>Conference location</legend>
 	  <p><label>Country: <input type="text" id="counrty"
-				    name="country"/></label></p>
+				    name="country" value="{{ cfp.country }}"/></label></p>
 	  <p><label>City: <input type="text" id="city"
-				 name="city"/></label></p>
+				 name="city" value="{{ cfp.city }}"/></label></p>
 	</fieldset>
 	<fieldset>
 	  <legend>Other informations</legend>
 	  <p><label>Keywords: <select name="keywords" size="3">
-		<option>security</option>
-		<option>OS</option>
-		<option>Smartcard</option>
+		<option {% if cfp.isSecurity %}selected="selected"{% endif %}>Security</option>
+		<option {% if cfp.isOS %}selected="selected"{% endif %}>OS</option>
+		<option {% if cfp.isSmartcard %}selected="selected"{% endif %}>Smartcard</option>
 	      </select>
 	  </p>
 	  <p><label>Acceptance rate: <input type="text" id="acceptance_rate"
-				    name="acceptance_rate"/></label></p>
+				    name="acceptance_rate" value="{{ cfp.acceptance_rate }}"/></label></p>
 	</fieldset>
       </fieldset>
       <input type="submit" value="Save this CFP"/>

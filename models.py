@@ -21,7 +21,19 @@ class Cfp(db.Model):
         self.website = db.Link(link)
 
     def setAcceptanceRate(self, rate):
-        self.rate = db.Rating(rate)
+        if rate == '':
+            self.rate = None
+        else:
+            self.rate = db.Rating(rate)
 
     def rfc3339_update():
         return last_update.strftime('%Y-%m-%dT%H:%M:%SZ')
+
+    def isSecurity(self):
+        return 'Security' in self.keywords
+
+    def isOS(self):
+        return 'OS' in self.keywords
+
+    def isSmartcard(self):
+        return 'Smartcard' in self.keywords
