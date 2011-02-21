@@ -14,3 +14,8 @@ indexes:
   properties:
   - name: submitters
   - name: begin_conf_date
+
+- kind: Cfp
+  properties:
+  - name: submitters
+  - name: submission_deadline

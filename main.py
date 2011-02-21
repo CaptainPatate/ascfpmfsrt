@@ -15,15 +15,12 @@ class CfpView(webapp.RequestHandler):
     def get(self):
 
         cfps = Cfp.all()
-        order = self.request.get('order')
+        cfps.filter('submission_deadline >=', datetime.date.today())
+        cfps.order('submission_deadline')
+
         people = self.request.get('people')
-        if order:
-            if order == 'deadline':
-                cfps = Cfp.gql('ORDER BY submission_deadline ASC')
-            elif order == 'beginning':
-                cfps = Cfp.gql('ORDER BY begin_conf_date ASC')
-        elif people:
-            cfps = Cfp.gql('WHERE submitters in :1', [users.User(people)])
+        if people:
+            cfps.filter('submitters IN', [users.User(people)])
 
         cfps = cfps.fetch(limit=50)
 
@@ -87,17 +84,27 @@ class FeedHandler(webapp.RequestHandler):
 
     def get(self, what, userid=None):
         if what == 'all':
-            cfps = Cfp.gql('ORDER BY begin_conf_date ASC').fetch(limit=50)
+            cfps = Cfp.all()
+            cfps.filter('submission_deadline >=', datetime.date.today())
+            cfps.order('submission_deadline').fetch(limit=50)
         elif what == 'submitters':
             user = users.get_current_user()
             if user:
-                cfps = Cfp.gql('WHERE submitters != NULL ORDER BY submitters,begin_conf_date ASC').fetch(limit=50)
+                cfps = Cfp.all()
+                cfps.filter('submission_deadline >=', datetime.date.today())
+                cfps.order('submission_deadline').fetch(limit=50)
+                # we can't make a query with two inequality conditions
+                # so we filter in python in the pending of model redesign
+                cfps = filter(lambda cfp: cfp.submitters != [], cfps)
             else:
                 self.redirect(users.create_login_url(self.request.uri))
         elif what == 'submitter':
             user = users.get_current_user()
             if user:
-                cfps = Cfp.gql('WHERE submitters in :1 ORDER BY submitters,begin_conf_date ASC', [users.User(userid.replace('%40','@'))]).fetch(limit=50)
+                cfps = Cfp.all()
+                cfps.filter('submission_deadline >=', datetime.date.today())
+                cfps.filter('submitters IN', [users.User(userid.replace('%40','@'))])
+                cfps.order('submission_deadline').fetch(limit=50)
             else:
                 self.redirect(users.create_login_url(self.request.uri))
         else:
