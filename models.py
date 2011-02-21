@@ -15,9 +15,13 @@ class Cfp(db.Model):
     submitters = db.ListProperty(User)
     category = db.StringProperty()
     keywords = db.StringListProperty()
+    last_update = db.DateTimeProperty(auto_now=True)
 
     def setWebsite(self, link):
         self.website = db.Link(link)
 
     def setAcceptanceRate(self, rate):
         self.rate = db.Rating(rate)
+
+    def rfc3339_update():
+        return last_update.strftime('%Y-%m-%dT%H:%M:%SZ')
