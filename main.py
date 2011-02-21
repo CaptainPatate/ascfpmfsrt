@@ -10,6 +10,7 @@ from models import Cfp
 
 # name, fullname, website, begin_conf_date, end_conf_date, submission_deadline,
 # notification_date, country, city, acceptance_rate, submitters, category, keywords
+# last_update
 
 class CfpView(webapp.RequestHandler):
     def get(self):
@@ -80,8 +81,6 @@ class UpdateHandler(webapp.RequestHandler):
 
 
 class FeedHandler(webapp.RequestHandler):
-    """Handles the list of quotes ordered in reverse chronological order."""
-
     def get(self, what, userid=None):
         if what == 'all':
             cfps = Cfp.all()
