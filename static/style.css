@@ -23,6 +23,16 @@ p {
     margin-top: 0px;
 }
 
+ul.cfp {
+    list-style: none;
+    border: solid;
+    border-width: 1px;
+}
+
+body>ul:nth-child(even) {
+    background-color:#C7C7C7;
+}
+
 a {
     color: #003399;
     text-decoration: none;
