@@ -1,4 +1,5 @@
 import datetime
+import logging
 import os
 
 from google.appengine.api import users
@@ -6,14 +7,30 @@ from google.appengine.ext import webapp, db
 from google.appengine.ext.webapp import template
 from google.appengine.ext.webapp.util import run_wsgi_app
 
-from models import Cfp
+from models import Cfp, AuthorizedUser
 
 # name, fullname, website, begin_conf_date, end_conf_date, submission_deadline,
 # notification_date, country, city, acceptance_rate, submitters, category, keywords
 # last_update
 
+def authenticationRequired(user, handler):
+    auth = AuthorizedUser.all()
+    auth.filter('uid =', user.user_id())
+
+    if not auth.get():
+        logging.info('The unauthorized user "%s (%s)" tried to connect.',
+                     user.nickname(), user.email())
+        handler.redirect('/out')
+
+class OutHandler(webapp.RequestHandler):
+    def get(self):
+        html = os.path.join(os.path.dirname(__file__), 'templates/not_authorized.html')
+        self.response.out.write(template.render(html, {'logout_url': users.create_logout_url("/")}))
+
+
 class CfpView(webapp.RequestHandler):
     def get(self):
+        authenticationRequired(users.get_current_user(), self)
 
         cfps = Cfp.all()
         cfps.filter('submission_deadline >=', datetime.date.today())
@@ -38,13 +55,14 @@ class AddCfpHandler(webapp.RequestHandler):
         return datetime.date(int(date[0]),int(date[1]),int(date[2]))
 
     def get(self, nothing):
+        authenticationRequired(users.get_current_user(), self)
+
         html = os.path.join(os.path.dirname(__file__), 'templates/add_cfp.html')
         self.response.out.write(template.render(html, {'logout_url': users.create_logout_url("/")}))
 
     def post(self, cfpid=None):
-        user = users.get_current_user()
-        if not user:
-            self.redirect(users.create_login_url(self.request.uri))
+        authenticationRequired(users.get_current_user(), self)
+
         if not cfpid:
             cfp = Cfp()
         else:
@@ -69,9 +87,7 @@ class AddCfpHandler(webapp.RequestHandler):
 
 class UpdateHandler(webapp.RequestHandler):
     def get(self, what, cfpid):
-        user = users.get_current_user()
-        if not user:
-            self.redirect(users.create_login_url(self.request.uri))
+        authenticationRequired(users.get_current_user(), self)
 
         if what == 'submit':
             cfp = db.get(cfpid)
@@ -95,25 +111,21 @@ class FeedHandler(webapp.RequestHandler):
             cfps.filter('submission_deadline >=', datetime.date.today())
             cfps.order('submission_deadline').fetch(limit=50)
         elif what == 'submitters':
-            user = users.get_current_user()
-            if user:
-                cfps = Cfp.all()
-                cfps.filter('submission_deadline >=', datetime.date.today())
-                cfps.order('submission_deadline').fetch(limit=50)
-                # we can't make a query with two inequality conditions
-                # so we filter in python in the pending of model redesign
-                cfps = filter(lambda cfp: cfp.submitters != [], cfps)
-            else:
-                self.redirect(users.create_login_url(self.request.uri))
+            authenticationRequired(users.get_current_user(), self)
+
+            cfps = Cfp.all()
+            cfps.filter('submission_deadline >=', datetime.date.today())
+            cfps.order('submission_deadline').fetch(limit=50)
+            # we can't make a query with two inequality conditions
+            # so we filter in python in the pending of model redesign
+            cfps = filter(lambda cfp: cfp.submitters != [], cfps)
         elif what == 'submitter':
-            user = users.get_current_user()
-            if user:
-                cfps = Cfp.all()
-                cfps.filter('submission_deadline >=', datetime.date.today())
-                cfps.filter('submitters IN', [users.User(userid.replace('%40','@'))])
-                cfps.order('submission_deadline').fetch(limit=50)
-            else:
-                self.redirect(users.create_login_url(self.request.uri))
+            authenticationRequired(users.get_current_user(), self)
+
+            cfps = Cfp.all()
+            cfps.filter('submission_deadline >=', datetime.date.today())
+            cfps.filter('submitters IN', [users.User(userid.replace('%40','@'))])
+            cfps.order('submission_deadline').fetch(limit=50)
         else:
             self.response.set_status(404, 'Not Found')
             return      
@@ -125,6 +137,7 @@ class FeedHandler(webapp.RequestHandler):
 
 
 application = webapp.WSGIApplication([(r'/', CfpView),
+                                      (r'/out', OutHandler),
                                       (r'/addcfp/(.*)', AddCfpHandler),
                                       (r'/(submit)/(.*)', UpdateHandler),
                                       (r'/(update)/(.*)', UpdateHandler),

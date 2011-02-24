@@ -37,3 +37,7 @@ class Cfp(db.Model):
 
     def isSmartcard(self):
         return 'Smartcard' in self.keywords
+
+
+class AuthorizedUser(db.Model):
+    uid = db.StringProperty()
