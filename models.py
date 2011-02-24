@@ -26,8 +26,8 @@ class Cfp(db.Model):
         else:
             self.rate = db.Rating(rate)
 
-    def rfc3339_update():
-        return last_update.strftime('%Y-%m-%dT%H:%M:%SZ')
+    def rfc3339_update(self):
+        return self.last_update.strftime('%Y-%m-%dT%H:%M:%SZ')
 
     def isSecurity(self):
         return 'Security' in self.keywords
