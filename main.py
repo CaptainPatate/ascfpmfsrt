@@ -39,7 +39,7 @@ class AddCfpHandler(webapp.RequestHandler):
 
     def get(self):
         html = os.path.join(os.path.dirname(__file__), 'templates/add_cfp.html')
-        self.response.out.write(template.render(html, {}))
+        self.response.out.write(template.render(html, {'logout_url': users.create_logout_url("/")}))
 
     def post(self):
         user = users.get_current_user()
