@@ -23,5 +23,5 @@ class Cfp(db.Model):
     def setAcceptanceRate(self, rate):
         self.rate = db.Rating(rate)
 
-    def rfc3339_update():
-        return last_update.strftime('%Y-%m-%dT%H:%M:%SZ')
+    def rfc3339_update(self):
+        return self.last_update.strftime('%Y-%m-%dT%H:%M:%SZ')
