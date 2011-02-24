@@ -1,4 +1,4 @@
-<xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" 
            "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
@@ -36,6 +36,7 @@
 		      selected="selected" {% endifequal %}>Conference</option>
 	      <option value="workshop" {% ifequal  cfp.category 'workshop' %}
 		      selected="selected" {% endifequal %}>Workshop</option>
+	  </select></label>
 	</p>
 	<fieldset>
 	  <legend>Important dates</legend>
@@ -73,13 +74,13 @@
 		<option {% if cfp.isSecurity %}selected="selected"{% endif %}>Security</option>
 		<option {% if cfp.isOS %}selected="selected"{% endif %}>OS</option>
 		<option {% if cfp.isSmartcard %}selected="selected"{% endif %}>Smartcard</option>
-	      </select>
+	      </select></label>
 	  </p>
 	  <p><label>Acceptance rate: <input type="text" id="acceptance_rate"
 				    name="acceptance_rate" value="{{ cfp.acceptance_rate }}"/></label></p>
 	</fieldset>
+	<input type="submit" value="Save this CFP"/>
       </fieldset>
-      <input type="submit" value="Save this CFP"/>
     </form>
   </body>
 </html>
