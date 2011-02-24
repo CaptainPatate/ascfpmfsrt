@@ -90,6 +90,7 @@ class UpdateHandler(webapp.RequestHandler):
         authenticationRequired(users.get_current_user(), self)
 
         if what == 'submit':
+            user = users.get_current_user()
             cfp = db.get(cfpid)
             if user not in cfp.submitters:
                 cfp.submitters.append(user)
