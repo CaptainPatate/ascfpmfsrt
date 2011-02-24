@@ -12,7 +12,7 @@
 
     <ul id="navigation">
       {% if logout_url %}
-      <li><a href="{{ logout_url }}">Logout</a></li>
+      <li><a href="{{ logout_url|escape }}">Logout</a></li>
       {% endif %}
       <li><a href="/">All CFPs</a></li>
       <li><a href="/addcfp">Add a CFP</a></li>
