@@ -18,8 +18,8 @@ def authenticationRequired(user, handler):
     auth.filter('uid =', user.user_id())
 
     if not auth.get():
-        logging.info('The unauthorized user "%s (%s)" tried to connect.',
-                     user.nickname(), user.email())
+        logging.info('The unauthorized user "%s (%s) <%s>" tried to connect.',
+                     user.nickname(), user.email(), user.user_id())
         handler.redirect('/out')
 
 class OutHandler(webapp.RequestHandler):
