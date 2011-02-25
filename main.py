@@ -42,7 +42,7 @@ class CfpView(webapp.RequestHandler):
 
         cfps = cfps.fetch(limit=50)
 
-        html = os.path.join(os.path.dirname(__file__), 'templates/index.html')
+        html = os.path.join(os.path.dirname(__file__), 'templates/minimal.html')
         self.response.out.write(template.render(html, {'logout_url': users.create_logout_url("/"),
                                                        'nombre':len(cfps),'cfps':cfps}))
 

@@ -1,12 +1,17 @@
 body {
     background-color: #EEEEEE;
     color: #363636;
-    margin-left: 20%;
-    margin-right: 20%;
+    margin-left: 7%;
+    margin-right: 7%;
     margin-top: 50px;
     font-family: Verdana, Geneva, Arial, sans-serif;
     font-size: small;
     line-height: 150%;
+}
+
+.deadline {
+    color: red;
+    font-weight: bold;
 }
 
 h1 {
@@ -28,16 +33,6 @@ div.warning {
     background-color: #fee;
     margin-bottom: 1em;
     padding: 1em;
-}
-
-ul.cfp {
-    list-style: none;
-    border: solid;
-    border-width: 1px;
-}
-
-body>ul:nth-child(even) {
-    background-color:#C7C7C7;
 }
 
 a {
