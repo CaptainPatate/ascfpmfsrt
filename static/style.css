@@ -35,17 +35,18 @@ div.warning {
     padding: 1em;
 }
 
-li>a.control {
+li.cfp>a.control {
     visibility: hidden;
     float: right;
+    padding-left: 5px;
     font-size: x-small;
 }
 
-li:hover {
+li.cfp:hover {
     border: 1px solid #363636;
 }
 
-li:hover>a.control {
+li.cfp:hover>a.control {
     visibility: visible;
 }
 

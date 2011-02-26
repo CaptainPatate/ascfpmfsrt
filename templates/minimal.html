@@ -19,7 +19,7 @@
 
     <ol>
       {% for cfp in cfps %}
-      <li>
+      <li class="cfp">
 	<a href="{{ cfp.website }}">{{ cfp.name }}</a> &mdash;
 	<em>{{ cfp.fullname }}</em> ({{ cfp.category }}) &mdash;
 	{{ cfp.city }},	{{ cfp.country }} &mdash;
@@ -28,6 +28,7 @@
 	Notification: {{ cfp.notification_date|date:"d/m/Y" }}
 	{% if cfp.sumbitters %} &mdash; [{{ cfp.submitters|join:","}}] {% endif %}
 	<a href="/update/{{ cfp.key }}" class="control">edit</a>
+	<a href="/details/{{ cfp.key }}" class="control">more details</a>
       </li>
       {% endfor %}
     </ol>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" 
+           "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <meta name="robots" content="noarchive"/>
+    <link rel="stylesheet" href="/static/style.css" type="text/css" media="screen"/>
+    <title>A Simple CFP manager For Small Researcher Team</title>
+  </head>
+
+  <body>
+
+    <ul id="navigation">
+      {% if logout_url %}
+      <li><a href="{{ logout_url|escape }}">Logout</a></li>
+      {% endif %}
+      <li><a href="/">All CFPs</a></li>
+      <li><a href="/addcfp/">Add a CFP</a></li>
+    </ul>
+    <h1>{{ cfp.name }}</h1>
+    <ul>
+      <li><a href="{{ cfp.website }}">{{ cfp.fullname }} ({{ cfp.category }})</a></li>
+      <li>From {{ cfp.begin_conf_date }} to {{ cfp.end_conf_date }}</li>
+      <li>Important dates:
+	<ul>
+	  <li>Deadline: {{ cfp.submission_deadline }}</li>
+	  <li>Acceptance notification: {{ cfp.notification_date }}</li>
+	</ul>
+      </li>
+      <li>{{ cfp.name }} will takes place in {{ cfp.city }},
+	{{ cfp.country }}</li>
+      <li>Keywords: {% for keyword in cfp.keywords %}
+	{{ keyword }}
+	{% endfor %}</li>
+      <li>Acceptance rate: {{ cfp.rate }}</li>
+      <li>The people will submit a paper:
+	<ul>
+	  {% for people in cfp.submitters %}
+	  <li><a href="/?people={{ people.email }}">
+	      {{ people.nickname }}</a> </li>
+	  {% endfor %}
+	  <li><a href="/submit/{{ cfp.key }}">I will submit a paper to
+	      this conference !</a></li>
+	</ul>
+      </li>
+      <li><a href="/update/{{ cfp.key }}">I want to modify this CFP</a></li>
+    </ul>
+  </body>
+</html>

@@ -49,6 +49,17 @@ class CfpView(webapp.RequestHandler):
         self.response.out.write(template.render(html, {'logout_url': users.create_logout_url("/"),
                                                        'nombre':len(cfps),'cfps':cfps}))
 
+class DetailsHandler(webapp.RequestHandler):
+    def get(self, cfpid):
+        authenticationRequired(users.get_current_user(), self)
+
+        cfp = db.get(cfpid)
+
+        html = os.path.join(os.path.dirname(__file__), 'templates/details.html')
+        self.response.out.write(template.render(html, {'logout_url': users.create_logout_url("/"),
+                                                       'cfp':cfp}))
+
+
 
 class AddCfpHandler(webapp.RequestHandler):
     def to_datetime(self, date):
@@ -141,6 +152,7 @@ class FeedHandler(webapp.RequestHandler):
 
 
 application = webapp.WSGIApplication([(r'/', CfpView),
+                                      (r'/details/(.+)', DetailsHandler),
                                       (r'/out', OutHandler),
                                       (r'/addcfp/(.*)', AddCfpHandler),
                                       (r'/(submit)/(.*)', UpdateHandler),
