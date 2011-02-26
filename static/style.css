@@ -35,6 +35,20 @@ div.warning {
     padding: 1em;
 }
 
+li>a.control {
+    visibility: hidden;
+    float: right;
+    font-size: x-small;
+}
+
+li:hover {
+    border: 1px solid #363636;
+}
+
+li:hover>a.control {
+    visibility: visible;
+}
+
 a {
     color: #003399;
     text-decoration: none;
