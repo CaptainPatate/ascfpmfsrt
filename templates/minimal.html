@@ -23,7 +23,7 @@
 	<a href="{{ cfp.website }}">{{ cfp.name }}</a> &mdash;
 	<em>{{ cfp.fullname }}</em> ({{ cfp.category }}) &mdash;
 	{{ cfp.city }},	{{ cfp.country }} &mdash;
-	<span class="deadline">Submission deadline:
+	<span class="deadline">Deadline:
 	  {{ cfp.submission_deadline|date:"d/m/Y" }}</span> &mdash;
 	Notification: {{ cfp.notification_date|date:"d/m/Y" }}
 	{% if cfp.submitters %} &mdash; [{{ cfp.submitters|join:","}}] {% endif %}
