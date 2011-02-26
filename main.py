@@ -76,7 +76,7 @@ class AddCfpHandler(webapp.RequestHandler):
         cfp.notification_date = self.to_datetime(self.request.get('notification_date'))
         cfp.country = self.request.get('country')
         cfp.city = self.request.get('city')
-        cfp.keywords = [self.request.get('keywords')]
+        cfp.keywords = self.request.get_all('keywords')
         cfp.setAcceptanceRate(self.request.get('acceptance_rate'))
 
         cfp.put()

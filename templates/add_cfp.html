@@ -72,7 +72,7 @@
 	</fieldset>
 	<fieldset>
 	  <legend>Other informations</legend>
-	  <p><label>Keywords: <select name="keywords" size="3">
+	  <p><label>Keywords: <select name="keywords" multiple="multiple" size="10">
 		<option {% if cfp.isSecurity %}selected="selected"{% endif %}>Security</option>
 		<option {% if cfp.isOS %}selected="selected"{% endif %}>OS</option>
 		<option {% if cfp.isSmartcard %}selected="selected"{% endif %}>Smartcard</option>
