@@ -42,24 +42,20 @@
 	  <legend>Important dates</legend>
 	  <p><label>The conference will begin on: <input type="text" id="begin_conf_date"
 							 name="begin_conf_date"
-							 value={% if cfp.begin_conf_date %} "{{ cfp.begin_conf_date }}"
-								{% else %}
-								"yyyy-mm-jj"{% endif %}/></label></p>
+							 value="{{ cfp.begin_conf_date|default:"yyyy-mm-jj" }}"/>
+	  </label></p>
 	  <p><label>The conference will end on: <input type="text" id="end_conf_date"
 						       name="end_conf_date"
-						       value={% if cfp.end_conf_date %} "{{ cfp.end_conf_date }}"
-							      {% else %}
-							      "yyyy-mm-jj"{% endif %}/></label></p>
+						       value="{{ cfp.end_conf_date|default:"yyyy-mm-jj" }}"/>
+	  </label></p>
 	  <p><label>Deadline for submission: <input type="text" id="submission_deadline"
 						    name="submission_deadline"
-						    value={% if cfp.submission_deadline %} "{{ cfp.submission_deadline }}"
-							   {% else %}
-							   "yyyy-mm-jj"{% endif %}/></label></p>
+						    value="{{ cfp.submission_deadline|default:"yyyy-mm-jj" }}"/>
+	  </label></p>
 	  <p><label>Notification: <input type="text" id="notification_date"
 					 name="notification_date"
-					 value={% if cfp.notification_date %} "{{ cfp.notification_date }}"
-						{% else %}
-						"yyyy-mm-jj"{% endif %}/></label></p>
+					 value="{{ cfp.notification_date|default:"yyyy-mm-jj" }}"/>
+	  </label></p>
 	</fieldset>
 	<fieldset>
 	  <legend>Conference location</legend>
