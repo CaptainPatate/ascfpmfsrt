@@ -23,8 +23,9 @@
 	<a href="{{ cfp.website }}">{{ cfp.name }}</a> &mdash;
 	<em>{{ cfp.fullname }}</em> ({{ cfp.category }}) &mdash;
 	{{ cfp.city }},	{{ cfp.country }} &mdash;
-	<span class="deadline">Submission deadline: {{ cfp.submission_deadline }}</span> &mdash;
-	Notification: {{ cfp.notification_date }}
+	<span class="deadline">Submission deadline:
+	  {{ cfp.submission_deadline|date:"d/m/Y" }}</span> &mdash;
+	Notification: {{ cfp.notification_date|date:"d/m/Y" }}
 	{% if cfp.sumbitters %} &mdash; [
 	{% for people in cfp.submitters %}
 	  {{ people.nickname }}
