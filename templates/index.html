@@ -31,9 +31,7 @@
       </li>
       <li>{{ cfp.name }} will takes place in {{ cfp.city }},
 	{{ cfp.country }}</li>
-      <li>Keywords: {% for keyword in cfp.keywords %}
-	{{ keyword }}
-	{% endfor %}</li>
+      <li>Keywords: {{ cfp.keywords|join:", " }}</li>
       <li>Acceptance rate: {{ cfp.rate }}</li>
       <li>The people will submit a paper:
 	<ul>
