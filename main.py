@@ -2,6 +2,9 @@ import datetime
 import logging
 import os
 
+from google.appengine.dist import use_library
+use_library('django', '1.2')
+
 from google.appengine.api import users
 from google.appengine.ext import webapp, db
 from google.appengine.ext.webapp import template
@@ -40,7 +43,7 @@ class CfpView(webapp.RequestHandler):
         if people:
             cfps.filter('submitters IN', [users.User(people)])
 
-        cfps = cfps.fetch(limit=50)
+        cfps = cfps.fetch(limit=200)
 
         html = os.path.join(os.path.dirname(__file__), 'templates/minimal.html')
         self.response.out.write(template.render(html, {'logout_url': users.create_logout_url("/"),
@@ -110,13 +113,13 @@ class FeedHandler(webapp.RequestHandler):
         if what == 'all':
             cfps = Cfp.all()
             cfps.filter('submission_deadline >=', datetime.date.today())
-            cfps.order('submission_deadline').fetch(limit=50)
+            cfps.order('submission_deadline').fetch(limit=200)
         elif what == 'submitters':
             authenticationRequired(users.get_current_user(), self)
 
             cfps = Cfp.all()
             cfps.filter('submission_deadline >=', datetime.date.today())
-            cfps.order('submission_deadline').fetch(limit=50)
+            cfps.order('submission_deadline').fetch(limit=200)
             # we can't make a query with two inequality conditions
             # so we filter in python in the pending of model redesign
             cfps = filter(lambda cfp: cfp.submitters != [], cfps)
@@ -126,7 +129,7 @@ class FeedHandler(webapp.RequestHandler):
             cfps = Cfp.all()
             cfps.filter('submission_deadline >=', datetime.date.today())
             cfps.filter('submitters IN', [users.User(userid.replace('%40','@'))])
-            cfps.order('submission_deadline').fetch(limit=50)
+            cfps.order('submission_deadline').fetch(limit=200)
         else:
             self.response.set_status(404, 'Not Found')
             return      
