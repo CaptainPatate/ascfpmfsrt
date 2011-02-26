@@ -26,7 +26,7 @@
 	<span class="deadline">Submission deadline:
 	  {{ cfp.submission_deadline|date:"d/m/Y" }}</span> &mdash;
 	Notification: {{ cfp.notification_date|date:"d/m/Y" }}
-	{% if cfp.sumbitters %} &mdash; [{{ cfp.submitters|join:","}}] {% endif %}
+	{% if cfp.submitters %} &mdash; [{{ cfp.submitters|join:","}}] {% endif %}
 	<a href="/update/{{ cfp.key }}" class="control">edit</a>
 	<a href="/details/{{ cfp.key }}" class="control">more details</a>
       </li>
