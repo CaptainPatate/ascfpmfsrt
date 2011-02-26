@@ -40,29 +40,35 @@
 	</p>
 	<fieldset>
 	  <legend>Important dates</legend>
-	  <p><label>The conference will begin on: <input type="text" id="begin_conf_date"
-							 name="begin_conf_date"
-							 value="{{ cfp.begin_conf_date|default:"yyyy-mm-jj" }}"/>
+	  <p><label>The conference will begin on:
+	      <input type="text" id="begin_conf_date"
+		     name="begin_conf_date"
+		     value="{{ cfp.begin_conf_date|default:"yyyy-mm-jj"|date:"Y-m-d" }}"/>
 	  </label></p>
-	  <p><label>The conference will end on: <input type="text" id="end_conf_date"
-						       name="end_conf_date"
-						       value="{{ cfp.end_conf_date|default:"yyyy-mm-jj" }}"/>
+	  <p><label>The conference will end on:
+	      <input type="text" id="end_conf_date"
+		     name="end_conf_date"
+		     value="{{ cfp.end_conf_date|default:"yyyy-mm-jj"|date:"Y-m-d" }}"/>
 	  </label></p>
-	  <p><label>Deadline for submission: <input type="text" id="submission_deadline"
-						    name="submission_deadline"
-						    value="{{ cfp.submission_deadline|default:"yyyy-mm-jj" }}"/>
+	  <p><label>Deadline for submission:
+	      <input type="text" id="submission_deadline"
+		     name="submission_deadline"
+		     value="{{ cfp.submission_deadline|default:"yyyy-mm-jj"|date:"Y-m-d" }}"/>
 	  </label></p>
-	  <p><label>Notification: <input type="text" id="notification_date"
-					 name="notification_date"
-					 value="{{ cfp.notification_date|default:"yyyy-mm-jj" }}"/>
+	  <p><label>Notification:
+	      <input type="text" id="notification_date"
+		     name="notification_date"
+		     value="{{ cfp.notification_date|default:"yyyy-mm-jj"|date:"Y-m-d" }}"/>
 	  </label></p>
 	</fieldset>
 	<fieldset>
 	  <legend>Conference location</legend>
-	  <p><label>Country: <input type="text" id="counrty"
-				    name="country" value="{{ cfp.country }}"/></label></p>
-	  <p><label>City: <input type="text" id="city"
-				 name="city" value="{{ cfp.city }}"/></label></p>
+	  <p><label>Country:
+	      <input type="text" id="counrty"
+		     name="country" value="{{ cfp.country }}"/></label></p>
+	  <p><label>City:
+	      <input type="text" id="city"
+		     name="city" value="{{ cfp.city }}"/></label></p>
 	</fieldset>
 	<fieldset>
 	  <legend>Other informations</legend>
@@ -72,8 +78,9 @@
 		<option {% if cfp.isSmartcard %}selected="selected"{% endif %}>Smartcard</option>
 	      </select></label>
 	  </p>
-	  <p><label>Acceptance rate: <input type="text" id="acceptance_rate"
-				    name="acceptance_rate" value="{{ cfp.acceptance_rate }}"/></label></p>
+	  <p><label>Acceptance rate:
+	      <input type="text" id="acceptance_rate"
+		     name="acceptance_rate" value="{{ cfp.acceptance_rate }}"/></label></p>
 	</fieldset>
 	<input type="submit" value="Save this CFP"/>
       </fieldset>
