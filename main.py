@@ -38,11 +38,6 @@ class CfpView(webapp.RequestHandler):
         cfps = Cfp.all()
         cfps.filter('submission_deadline >=', datetime.date.today())
         cfps.order('submission_deadline')
-
-        people = self.request.get('people')
-        if people:
-            cfps.filter('submitters IN', [users.User(people)])
-
         cfps = cfps.fetch(limit=200)
 
         html = os.path.join(os.path.dirname(__file__), 'templates/index.html')
