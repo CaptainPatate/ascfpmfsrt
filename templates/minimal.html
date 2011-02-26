@@ -26,12 +26,7 @@
 	<span class="deadline">Submission deadline:
 	  {{ cfp.submission_deadline|date:"d/m/Y" }}</span> &mdash;
 	Notification: {{ cfp.notification_date|date:"d/m/Y" }}
-	{% if cfp.sumbitters %} &mdash; [
-	{% for people in cfp.submitters %}
-	  {{ people.nickname }}
-	      {{ people.nickname }}
-	  {% endfor %}
-	] {% endif %}
+	{% if cfp.sumbitters %} &mdash; [{{ cfp.submitters|join:","}}] {% endif %}
       </li>
     {% endfor %}
     </ol>
