@@ -80,7 +80,13 @@
 	  </p>
 	  <p><label>Acceptance rate:
 	      <input type="text" id="acceptance_rate"
-		     name="acceptance_rate" value="{{ cfp.acceptance_rate }}"/></label></p>
+		     name="acceptance_rate"
+		     value="{{ cfp.acceptance_rate }}"/></label></p>
+	  <p><label>Submitter:
+	      <input type="checkbox" name="submitters"
+		     value="{{ user.email }}"
+		     {% if user in cfp.submitters %}checked="checked"{% endif %}/>
+	      I will submit a paper for this.</label></p>
 	</fieldset>
 	<input type="submit" value="Save this CFP"/>
       </fieldset>

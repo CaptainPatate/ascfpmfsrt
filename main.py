@@ -56,7 +56,8 @@ class AddCfpHandler(webapp.RequestHandler):
         authenticationRequired(users.get_current_user(), self)
 
         html = os.path.join(os.path.dirname(__file__), 'templates/add_cfp.html')
-        self.response.out.write(template.render(html, {'logout_url': users.create_logout_url("/")}))
+        self.response.out.write(template.render(html, {'logout_url': users.create_logout_url("/"),
+                                                       'user': users.get_current_user()}))
 
     def post(self, cfpid=None):
         authenticationRequired(users.get_current_user(), self)
@@ -78,6 +79,13 @@ class AddCfpHandler(webapp.RequestHandler):
         cfp.city = self.request.get('city')
         cfp.keywords = self.request.get_all('keywords')
         cfp.setAcceptanceRate(self.request.get('acceptance_rate'))
+        submit = self.request.get('submitters')
+        if submit:
+            cfp.submitters.append(users.User(submit))
+            logging.debug('user = %s added ', cfp.submitters[0].email())
+        elif users.get_current_user() in cfp.submitters:
+            cfp.submitters.remove(users.get_current_user())
+            logging.debug('user = %s removed ', users.get_current_user())
 
         cfp.put()
         self.redirect('/')
@@ -97,7 +105,8 @@ class UpdateHandler(webapp.RequestHandler):
         elif what == 'update':
             cfp = db.get(cfpid)
             html = os.path.join(os.path.dirname(__file__), 'templates/add_cfp.html')
-            self.response.out.write(template.render(html, {'cfp':cfp}))
+            self.response.out.write(template.render(html, {'cfp':cfp,
+                                                           'user': users.get_current_user()}))
         else:
             self.response.set_status(404, 'Not Found')
             return
