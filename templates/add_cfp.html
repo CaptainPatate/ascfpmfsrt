@@ -40,44 +40,53 @@
 	</p>
 	<fieldset>
 	  <legend>Important dates</legend>
-	  <p><label>The conference will begin on: <input type="text" id="begin_conf_date"
-							 name="begin_conf_date"
-							 value={% if cfp.begin_conf_date %} "{{ cfp.begin_conf_date }}"
-								{% else %}
-								"yyyy-mm-jj"{% endif %}/></label></p>
-	  <p><label>The conference will end on: <input type="text" id="end_conf_date"
-						       name="end_conf_date"
-						       value={% if cfp.end_conf_date %} "{{ cfp.end_conf_date }}"
-							      {% else %}
-							      "yyyy-mm-jj"{% endif %}/></label></p>
-	  <p><label>Deadline for submission: <input type="text" id="submission_deadline"
-						    name="submission_deadline"
-						    value={% if cfp.submission_deadline %} "{{ cfp.submission_deadline }}"
-							   {% else %}
-							   "yyyy-mm-jj"{% endif %}/></label></p>
-	  <p><label>Notification: <input type="text" id="notification_date"
-					 name="notification_date"
-					 value={% if cfp.notification_date %} "{{ cfp.notification_date }}"
-						{% else %}
-						"yyyy-mm-jj"{% endif %}/></label></p>
+	  <p><label>The conference will begin on:
+	      <input type="text" id="begin_conf_date"
+		     name="begin_conf_date"
+		     value="{{ cfp.begin_conf_date|date:"Y-m-d"|default:"yyyy-mm-jj" }}"/>
+	  </label></p>
+	  <p><label>The conference will end on:
+	      <input type="text" id="end_conf_date"
+		     name="end_conf_date"
+		     value="{{ cfp.end_conf_date|date:"Y-m-d"|default:"yyyy-mm-jj" }}"/>
+	  </label></p>
+	  <p><label>Deadline for submission:
+	      <input type="text" id="submission_deadline"
+		     name="submission_deadline"
+		     value="{{ cfp.submission_deadline|date:"Y-m-d"|default:"yyyy-mm-jj" }}"/>
+	  </label></p>
+	  <p><label>Notification:
+	      <input type="text" id="notification_date"
+		     name="notification_date"
+		     value="{{ cfp.notification_date|date:"Y-m-d"|default:"yyyy-mm-jj" }}"/>
+	  </label></p>
 	</fieldset>
 	<fieldset>
 	  <legend>Conference location</legend>
-	  <p><label>Country: <input type="text" id="counrty"
-				    name="country" value="{{ cfp.country }}"/></label></p>
-	  <p><label>City: <input type="text" id="city"
-				 name="city" value="{{ cfp.city }}"/></label></p>
+	  <p><label>Country:
+	      <input type="text" id="counrty"
+		     name="country" value="{{ cfp.country }}"/></label></p>
+	  <p><label>City:
+	      <input type="text" id="city"
+		     name="city" value="{{ cfp.city }}"/></label></p>
 	</fieldset>
 	<fieldset>
 	  <legend>Other informations</legend>
-	  <p><label>Keywords: <select name="keywords" size="3">
+	  <p><label>Keywords: <select name="keywords" multiple="multiple" size="10">
 		<option {% if cfp.isSecurity %}selected="selected"{% endif %}>Security</option>
 		<option {% if cfp.isOS %}selected="selected"{% endif %}>OS</option>
 		<option {% if cfp.isSmartcard %}selected="selected"{% endif %}>Smartcard</option>
 	      </select></label>
 	  </p>
-	  <p><label>Acceptance rate: <input type="text" id="acceptance_rate"
-				    name="acceptance_rate" value="{{ cfp.acceptance_rate }}"/></label></p>
+	  <p><label>Acceptance rate:
+	      <input type="text" id="acceptance_rate"
+		     name="acceptance_rate"
+		     value="{{ cfp.acceptance_rate }}"/></label></p>
+	  <p><label>Submitter:
+	      <input type="checkbox" name="submitters"
+		     value="{{ user.email }}"
+		     {% if user in cfp.submitters %}checked="checked"{% endif %}/>
+	      I will submit a paper for this.</label></p>
 	</fieldset>
 	<input type="submit" value="Save this CFP"/>
       </fieldset>
