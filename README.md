@@ -8,7 +8,8 @@ thematic list of CFP in a researcher team.
 License
 =======
 
-This software is distributed under BSD license.
+This software is distributed under MIT license. See [LICENSE
+file](https://github.com/CaptainPatate/ascfpmfsrt/blob/master/LICENSE)
 
 Installation
 ============
