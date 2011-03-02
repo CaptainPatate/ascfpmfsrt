@@ -24,9 +24,18 @@
 	<a href="{{ cfp.website }}">{{ cfp.name }}</a> &mdash;
 	<em>{{ cfp.fullname }}</em> ({{ cfp.category }}) &mdash;
 	{{ cfp.city }},	{{ cfp.country }} &mdash;
-	<span class="deadline">Deadline:
-	  {{ cfp.submission_deadline|date:"d/m/Y" }}</span> &mdash;
-	Notification: {{ cfp.notification_date|date:"d/m/Y" }}
+	{% ifequal color 'deadline' %}
+	<span class="red">Deadline:
+	  {{ cfp.submission_deadline|date:"d/m/Y" }}</span>
+	{% else %}Deadline:
+	  {{ cfp.submission_deadline|date:"d/m/Y" }}
+	{% endifequal %}&mdash;
+	{% ifequal color 'notification' %}
+	<span class="red">Notification:
+	  {{ cfp.notification_date|date:"d/m/Y" }}</span>
+	{% else %}Notification:
+          {{ cfp.notification_date|date:"d/m/Y" }}
+	{% endifequal %}
 	{% if cfp.submitters %} &mdash; [{{ cfp.submittersNickname|join:","}}] {% endif %}
 	<a href="/update/{{ cfp.key }}" class="control">edit</a>
 	<a href="/details/{{ cfp.key }}" class="control">more details</a>

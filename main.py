@@ -36,20 +36,24 @@ class CfpView(webapp.RequestHandler):
         authenticationRequired(users.get_current_user(), self)
 
         cfps = Cfp.all()
+        color = 'nothing'
         if view == 'notification':
             cfps.filter('notification_date >=', datetime.date.today() - datetime.timedelta(days=7))
             cfps.order('notification_date').fetch(limit=200)
             # we can't make a query with two inequality conditions
             # so we filter in python in the pending of model redesign
             cfps = filter(lambda cfp: cfp.submitters != [], cfps)
+            color = 'notification'
         else:
             cfps.filter('submission_deadline >=', datetime.date.today())
             cfps.order('submission_deadline')
             cfps = cfps.fetch(limit=200)
+            color = 'deadline'
 
         html = os.path.join(os.path.dirname(__file__), 'templates/minimal.html')
         self.response.out.write(template.render(html, {'logout_url': users.create_logout_url("/"),
-                                                       'nombre':len(cfps),'cfps':cfps}))
+                                                       'nombre':len(cfps),'cfps':cfps,
+                                                       'color':color}))
 
 class DetailsHandler(webapp.RequestHandler):
     def get(self, cfpid):
