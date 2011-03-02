@@ -102,10 +102,13 @@ class AddCfpHandler(webapp.RequestHandler):
         cfp.keywords = self.request.get_all('keywords')
         cfp.setAcceptanceRate(self.request.get('acceptance_rate'))
         submit = self.request.get('submitters')
+
+        user = users.get_current_user()
         if submit:
-            cfp.submitters.append(users.User(submit))
-            logging.debug('user = %s added ', cfp.submitters[0].email())
-        elif users.get_current_user() in cfp.submitters:
+            if user not in cfp.submitters:
+                cfp.submitters.append(users.User(submit))
+                logging.debug('user = %s added ', cfp.submitters[0].email())
+        elif user in cfp.submitters:
             cfp.submitters.remove(users.get_current_user())
             logging.debug('user = %s removed ', users.get_current_user())
 
