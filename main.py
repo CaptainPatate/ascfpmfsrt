@@ -32,13 +32,20 @@ class OutHandler(webapp.RequestHandler):
 
 
 class CfpView(webapp.RequestHandler):
-    def get(self):
+    def get(self, view=None):
         authenticationRequired(users.get_current_user(), self)
 
         cfps = Cfp.all()
-        cfps.filter('submission_deadline >=', datetime.date.today())
-        cfps.order('submission_deadline')
-        cfps = cfps.fetch(limit=200)
+        if view == 'notification':
+            cfps.filter('notification_date >=', datetime.date.today() - datetime.timedelta(days=7))
+            cfps.order('notification_date').fetch(limit=200)
+            # we can't make a query with two inequality conditions
+            # so we filter in python in the pending of model redesign
+            cfps = filter(lambda cfp: cfp.submitters != [], cfps)
+        else:
+            cfps.filter('submission_deadline >=', datetime.date.today())
+            cfps.order('submission_deadline')
+            cfps = cfps.fetch(limit=200)
 
         html = os.path.join(os.path.dirname(__file__), 'templates/index.html')
         self.response.out.write(template.render(html, {'logout_url': users.create_logout_url("/"),
@@ -149,6 +156,7 @@ application = webapp.WSGIApplication([(r'/', CfpView),
                                       (r'/addcfp/(.*)', AddCfpHandler),
                                       (r'/(submit)/(.*)', UpdateHandler),
                                       (r'/(update)/(.*)', UpdateHandler),
+                                      (r'/view/(notification)', CfpView),
                                       (r'/feed/(all)', FeedHandler),
                                       (r'/feed/(submitters)', FeedHandler),
                                       (r'/feed/(submitter)/(.*)', FeedHandler)],
