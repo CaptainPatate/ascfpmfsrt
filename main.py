@@ -2,19 +2,29 @@ import datetime
 import logging
 import os
 
-from google.appengine.dist import use_library
-use_library('django', '1.2')
+import webapp2
+
+os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
+from django.template import loader
 
 from google.appengine.api import users
-from google.appengine.ext import webapp, db
-from google.appengine.ext.webapp import template
-from google.appengine.ext.webapp.util import run_wsgi_app
+from google.appengine.ext import db
 
 from models import Cfp, AuthorizedUser
 
 # name, fullname, website, begin_conf_date, end_conf_date, submission_deadline,
 # notification_date, country, city, acceptance_rate, submitters, category, keywords
 # last_update
+
+"""
+Wrapper method around Django templating engine to emulate
+the now legacy webapp templating engine.
+This will be used as transition.
+"""
+class template(object):
+    @staticmethod
+    def render(path, values):
+        return loader.render_to_string(path, values)
 
 def authenticationRequired(user, handler):
     auth = AuthorizedUser.all()
@@ -25,13 +35,13 @@ def authenticationRequired(user, handler):
                      user.nickname(), user.email(), user.user_id())
         handler.redirect('/out')
 
-class OutHandler(webapp.RequestHandler):
+class OutHandler(webapp2.RequestHandler):
     def get(self):
         html = os.path.join(os.path.dirname(__file__), 'templates/not_authorized.html')
         self.response.out.write(template.render(html, {'logout_url': users.create_logout_url("/")}))
 
 
-class CfpView(webapp.RequestHandler):
+class CfpView(webapp2.RequestHandler):
     def get(self, view=None):
         authenticationRequired(users.get_current_user(), self)
 
@@ -55,7 +65,7 @@ class CfpView(webapp.RequestHandler):
                                                        'nombre':len(cfps),'cfps':cfps,
                                                        'color':color}))
 
-class DetailsHandler(webapp.RequestHandler):
+class DetailsHandler(webapp2.RequestHandler):
     def get(self, cfpid):
         authenticationRequired(users.get_current_user(), self)
 
@@ -67,7 +77,7 @@ class DetailsHandler(webapp.RequestHandler):
 
 
 
-class AddCfpHandler(webapp.RequestHandler):
+class AddCfpHandler(webapp2.RequestHandler):
     def to_datetime(self, date):
         """convert string yyyy/mm/dd to a date object"""
         date = date.split('-')
@@ -116,7 +126,7 @@ class AddCfpHandler(webapp.RequestHandler):
         self.redirect('/')
 
 
-class UpdateHandler(webapp.RequestHandler):
+class UpdateHandler(webapp2.RequestHandler):
     def get(self, what, cfpid):
         authenticationRequired(users.get_current_user(), self)
 
@@ -137,7 +147,7 @@ class UpdateHandler(webapp.RequestHandler):
             return
 
 
-class FeedHandler(webapp.RequestHandler):
+class FeedHandler(webapp2.RequestHandler):
     def get(self, what, userid=None):
         if what == 'all':
             cfps = Cfp.all()
@@ -169,20 +179,14 @@ class FeedHandler(webapp.RequestHandler):
                                                                 'cfps':cfps}))
 
 
-application = webapp.WSGIApplication([(r'/', CfpView),
-                                      (r'/details/(.+)', DetailsHandler),
-                                      (r'/out', OutHandler),
-                                      (r'/addcfp/(.*)', AddCfpHandler),
-                                      (r'/(submit)/(.*)', UpdateHandler),
-                                      (r'/(update)/(.*)', UpdateHandler),
-                                      (r'/view/(notification)', CfpView),
-                                      (r'/feed/(all)', FeedHandler),
-                                      (r'/feed/(submitters)', FeedHandler),
-                                      (r'/feed/(submitter)/(.*)', FeedHandler)],
-                                     debug=True)
-
-def main():
-    run_wsgi_app(application)
-
-if __name__ == "__main__":
-    main()
+app = webapp2.WSGIApplication([(r'/', CfpView),
+                               (r'/details/(.+)', DetailsHandler),
+                               (r'/out', OutHandler),
+                               (r'/addcfp/(.*)', AddCfpHandler),
+                               (r'/(submit)/(.*)', UpdateHandler),
+                               (r'/(update)/(.*)', UpdateHandler),
+                               (r'/view/(notification)', CfpView),
+                               (r'/feed/(all)', FeedHandler),
+                               (r'/feed/(submitters)', FeedHandler),
+                               (r'/feed/(submitter)/(.*)', FeedHandler)],
+                              debug=True)
