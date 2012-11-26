@@ -18,11 +18,9 @@
       <li><a href="/view/notification">Notifications</a></li>
       <li><a href="/addcfp/">Add a CFP</a></li>
     </ul>
-    <h1>{{ nombre }} call for paper</h1>
-    {% for cfp in cfps %}
-    <ul class="cfp">
-      <li><a href="{{ cfp.website }}">{{ cfp.name }}</a> &mdash;
-	{{ cfp.fullname }} ({{ cfp.category }})</li>
+    <h1>{{ cfp.name }}</h1>
+    <ul>
+      <li><a href="{{ cfp.website }}">{{ cfp.fullname }} ({{ cfp.category }})</a></li>
       <li>From {{ cfp.begin_conf_date }} to {{ cfp.end_conf_date }}</li>
       <li>Important dates:
 	<ul>
@@ -46,6 +44,5 @@
       </li>
       <li><a href="/update/{{ cfp.key }}">I want to modify this CFP</a></li>
     </ul>
-    {% endfor %}
   </body>
 </html>
