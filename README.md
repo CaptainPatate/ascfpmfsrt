@@ -14,12 +14,13 @@ file](https://github.com/CaptainPatate/ascfpmfsrt/blob/master/LICENSE)
 Installation
 ============
 
-Currently this software uses [App Engine
-framework](http://code.google.com/appengine/). To run ASCFPMFSRT, you
+This software uses the
+[App Engine framework](https://developers.google.com/appengine/docs/python/python25/)
+Python legacy runtime Evironment (Python 2.5). To run ASCFPMFSRT, you
 need to create an App Engine Account. The account is free and Google
 gives you a free amount of quota which should be sufficient to run
-this software in the most case (see here for more details about [App
-Engine Quotas](http://code.google.com/appengine/docs/quotas.html).
+this software in the most case (see here for more details about
+[App Engine Quotas](http://code.google.com/appengine/docs/quotas.html).
 
 1. You need to download the [App Engine
 SDK](http://code.google.com/appengine/downloads.html) for your
