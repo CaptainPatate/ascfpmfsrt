@@ -58,7 +58,7 @@ class CfpView(webapp2.RequestHandler):
         elif view == 'old':
             cfps.filter('submission_deadline <', datetime.date.today())
             cfps.order('submission_deadline')
-            cfps = cfps.fetch(limit=200)
+            cfps = cfps.fetch(limit=800)
             editable = False
         else:
             cfps.filter('submission_deadline >=', datetime.date.today())
