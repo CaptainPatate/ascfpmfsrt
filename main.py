@@ -29,11 +29,16 @@ class template(object):
 def authenticationRequired(user, handler):
     auth = AuthorizedUser.all()
     auth.filter('uid =', user.user_id())
+    userOK = auth.get()
 
-    if not auth.get():
+    if not userOK:
         logging.info('The unauthorized user "%s (%s) <%s>" tried to connect.',
                      user.nickname(), user.email(), user.user_id())
         handler.redirect('/out')
+    elif not userOK.nickname or not userOK.email:
+        userOK.nickname = user.nickname()
+        userOK.email = user.email()
+        userOK.put()
 
 class OutHandler(webapp2.RequestHandler):
     def get(self):

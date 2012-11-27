@@ -44,3 +44,5 @@ class Cfp(db.Model):
 
 class AuthorizedUser(db.Model):
     uid = db.StringProperty()
+    nickname = db.StringProperty()
+    email = db.StringProperty()
