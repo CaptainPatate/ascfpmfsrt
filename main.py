@@ -47,6 +47,7 @@ class CfpView(webapp2.RequestHandler):
 
         cfps = Cfp.all()
         color = 'nothing'
+        editable = True
         if view == 'notification':
             cfps.filter('notification_date >=', datetime.date.today() - datetime.timedelta(days=7))
             cfps.order('notification_date').fetch(limit=200)
@@ -54,6 +55,11 @@ class CfpView(webapp2.RequestHandler):
             # so we filter in python in the pending of model redesign
             cfps = filter(lambda cfp: cfp.submitters != [], cfps)
             color = 'notification'
+        elif view == 'old':
+            cfps.filter('submission_deadline <', datetime.date.today())
+            cfps.order('submission_deadline')
+            cfps = cfps.fetch(limit=200)
+            editable = False
         else:
             cfps.filter('submission_deadline >=', datetime.date.today())
             cfps.order('submission_deadline')
@@ -63,7 +69,7 @@ class CfpView(webapp2.RequestHandler):
         html = os.path.join(os.path.dirname(__file__), 'templates/minimal.html')
         self.response.out.write(template.render(html, {'logout_url': users.create_logout_url("/"),
                                                        'nombre':len(cfps),'cfps':cfps,
-                                                       'color':color}))
+                                                       'color':color, 'editable': editable}))
 
 class DetailsHandler(webapp2.RequestHandler):
     def get(self, cfpid):
@@ -186,6 +192,7 @@ app = webapp2.WSGIApplication([(r'/', CfpView),
                                (r'/(submit)/(.*)', UpdateHandler),
                                (r'/(update)/(.*)', UpdateHandler),
                                (r'/view/(notification)', CfpView),
+                               (r'/view/(old)', CfpView),
                                (r'/feed/(all)', FeedHandler),
                                (r'/feed/(submitters)', FeedHandler),
                                (r'/feed/(submitter)/(.*)', FeedHandler)],
